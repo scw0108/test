@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Creative - Start Bootstrap Theme</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap Icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+        <!-- SimpleLightbox plugin CSS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        <!-- Socket.IO 的 CDN 連結 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"
+            integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        
+        <!-- Socket.IO 的使用 -->
+        <script type="text/javascript" charset="utf-8">
+            $(document).ready(function () {
+                // Socket.IO send message
+                $("#send").click(function (e) {
+                // Send message
+                    socket.emit('send', $('#message').val())
+                // Clear input field
+                    $('#message').val('')
+                });
+                // Socket.IO Start connect
+                var socket = io.connect();
+                // Socket.IO get test
+                socket.on("message", function (data) {
+                    $('#chat_content').append('<h4><p>' + data + '</p></h4>');
+                });
+                // Socket.IO send test
+                $("#subscribe").click(function (e) {
+                    socket.emit('subscribe')
+                });
+                $("#stop").click(function (e) {
+                    socket.emit('stop')
+                });
+            });
+        </script>
+        
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="#page-top">Baseball Keeper</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#Search">Search</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#Subscribe">Subscribe</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#Contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container px-4 px-lg-5 h-100">
+                <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-8 align-self-end">
+                        <h1 class="text-white font-weight-bold">Your Favorite Place to Search for Baseball Scores</h1>
+                        <hr class="divider" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                        <p class="text-white-75 mb-5">Baseball Keeper can help you subscribe and search to the playing field for the latest scores </p>
+                        <a class="btn btn-primary btn-xl" href="#Search">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Search-->
+        <section class="page-section" id="Search">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8 col-xl-6 text-center">
+                        <h2 class="mt-0">Search</h2>
+                        <hr class="divider" />
+                        <form align="center" action="/search" method="POST">
+                            <font size="5">&emsp;場地：</font>
+                            <select name="Stadium">
+                                <optgroup label="Stadium">
+                                <option>新莊</option>
+                                <option>天母</option>
+                                <option>桃園</option>
+                                <option>洲際</option>
+                                <option>台南</option>
+                                <option>花蓮</option>
+                                <option>台東</option>
+                            </select>
+                            </br></br>
+                            <font size="5">&emsp;時間：</font>
+                            <input name="Time" type="date" id="theDate" value="2022-01-01">
+                            </br></br>
+                            <p><button class="btn btn-primary" type="submit" align="center">Send</button></p>
+                        </form>
+                        <h3>{{result}}</h3><h4>{{score}}</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Subscribe-->
+        <section class="page-section bg-dark text-white" id="Subscribe">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8 col-xl-6 text-center">
+                        <h2 class="mt-0">Subscribe</h2>
+                        <hr class="divider" />
+                        <form align="center" action="/subscribe" method="POST">
+                            <font size="5">&emsp;場地：</font>
+                            <select name="Stadium">
+                                    <optgroup label="Stadium">
+                                    <option>新莊</option>
+                                    <option>天母</option>
+                                    <option>桃園</option>
+                                    <option>洲際</option>
+                                    <option>台南</option>
+                                    <option>花蓮</option>
+                                    <option>台東</option>
+                            </select>
+                            </br></br>
+                            <p><button class="btn btn-primary" type="submit" align="center">Send</button></p>
+                        </form>
+                        
+                        <fieldset>
+                            <input type="button" class="btn btn-primary" id="subscribe" value="Start" />
+                            <input type="button" class="btn btn-primary" id="stop" value="Stop" />
+                            <p></p>
+                        </fieldset>
+                        <p></p>
+                        <h3>{{result_sub}}</h3>
+                        <div id='chat_content'></div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+
+        </section>
+        <!-- Contact-->
+        <section class="page-section " id="Contact">
+            <div class="container px-4 px-lg-5 text-center">
+                <h2 class="mb-4">Contact</h2>
+                <hr class="divider" />
+                <a href="https://github.com/scw0108/distributed-systems-final-project.git"><img class="img-fluid" src="assets/img/github.png" width="50" /></a>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="bg-light py-5">
+            <div class="container px-4 px-lg-5"><div class="small text-center text-muted">2022</div></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SimpleLightbox plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    </body>
+</html>
